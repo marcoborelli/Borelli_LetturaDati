@@ -18,7 +18,11 @@ namespace Borelli_LetturaDati
         {
             InitializeComponent();
         }
-
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            textBox1.Text = "";
+            button3.Text = $"AUMENTA LUNGHEZZA [ATTUALE:{int.Parse(Funzione1e2(1))}]";
+        }
         private void button1_Click(object sender, EventArgs e)//conrolla che lunghezze siano uguali
         {
             MessageBox.Show(Funzione1e2(0));
@@ -29,7 +33,43 @@ namespace Borelli_LetturaDati
         }
         private void button3_Click(object sender, EventArgs e)
         {
+            try
+            {
+                if (int.Parse(textBox1.Text) > int.Parse(Funzione1e2(1)))
+                {
+                    string helo = "";
+                    using (StreamReader sr = new StreamReader(@"dati.csv", true))
+                    {
+                        string line = sr.ReadLine();
+                        while (line != null)
+                        {
+                            helo += line;
+                            line = sr.ReadLine();
+                        }
 
+                    }
+                    string[] fields = helo.Split('#');
+                    for (int i = 0; i < fields.Length - 1; i++)
+                    {
+                        //MessageBox.Show($"\"{fields[i]}\"");
+                        fields[i] = $"{fields[i].PadRight(int.Parse(textBox1.Text) - 1)}#";
+                        using (StreamWriter sr = new StreamWriter(@"dati1.csv"))
+                        {
+                            sr.WriteLine(fields[i]);
+                        }
+                    }
+
+                    System.IO.File.Delete(@"dati.csv");
+                    System.IO.File.Move(@"dati1.csv", @"dati.csv");
+                }
+                else
+                    MessageBox.Show("Inserire un valore maggiore di quello attuale");
+            }
+            catch
+            {
+                MessageBox.Show("Inserire valori validi AAAA");
+            }
+            Form1_Load(sender, e);
         }
         public static string Funzione1e2(int daDoveVieni)
         {
