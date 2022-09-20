@@ -55,13 +55,7 @@ namespace Borelli_LetturaDati
                     BinaryWriter writer = new BinaryWriter(f);
                     string[] fields = helo.Split('#');
                     for (int i = 0; i < fields.Length - 1; i++)
-                    {
-                        //MessageBox.Show($"{fields[i].Length}");
-                        //MessageBox.Show($"\"{fields[i]}\"");
-                        //fields[i] = $"{fields[i].PadRight(int.Parse(textBox1.Text) - 1)}#";
-
                         writer.Write($"{fields[i].PadRight(numm)}#".ToCharArray());
-                    }
 
                     f.Close();
 
@@ -113,6 +107,15 @@ namespace Borelli_LetturaDati
                 return "LE LUNGHEZZE SONO UGUALI";
             else//mi interessa solo la lunghezza maggiore
                 return $"{lunghezza}";
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            VisualizzaElimina vis = new VisualizzaElimina();
+            vis.numm = int.Parse(Funzione1e2(1))+1;
+            this.Visible = false;
+            vis.ShowDialog();
+            this.Visible = true;
         }
     }
 }
