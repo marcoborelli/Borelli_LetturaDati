@@ -37,30 +37,36 @@ namespace Borelli_LetturaDati
             {
                 if (int.Parse(textBox1.Text) > int.Parse(Funzione1e2(1)))
                 {
+                    int numm = int.Parse(textBox1.Text);
                     string helo = "";
-                    using (StreamReader sr = new StreamReader(@"dati.csv", true))
-                    {
-                        string line = sr.ReadLine();
-                        while (line != null)
-                        {
-                            helo += line;
-                            line = sr.ReadLine();
-                        }
 
-                    }
+                    var f = new FileStream(@"dati.csv", FileMode.Open, FileAccess.ReadWrite);
+                    BinaryReader reader = new BinaryReader(f);
+
+                    f.Seek(0, SeekOrigin.Begin);
+
+                    while (f.Position < f.Length)
+                        helo += Encoding.ASCII.GetString(reader.ReadBytes(1));
+
+                    // MessageBox.Show($"\"{helo}\"");
+
+                    f.Seek(0, SeekOrigin.Begin);
+
+                    BinaryWriter writer = new BinaryWriter(f);
                     string[] fields = helo.Split('#');
                     for (int i = 0; i < fields.Length - 1; i++)
                     {
+                        //MessageBox.Show($"{fields[i].Length}");
                         //MessageBox.Show($"\"{fields[i]}\"");
-                        fields[i] = $"{fields[i].PadRight(int.Parse(textBox1.Text) - 1)}#";
-                        using (StreamWriter sr = new StreamWriter(@"dati1.csv"))
-                        {
-                            sr.WriteLine(fields[i]);
-                        }
+                        //fields[i] = $"{fields[i].PadRight(int.Parse(textBox1.Text) - 1)}#";
+
+                        writer.Write($"{fields[i].PadRight(numm)}#".ToCharArray());
                     }
 
-                    System.IO.File.Delete(@"dati.csv");
-                    System.IO.File.Move(@"dati1.csv", @"dati.csv");
+                    f.Close();
+
+                    //System.IO.File.Delete(@"dati.csv");
+                    //System.IO.File.Move(@"dati1.csv", @"dati.csv");
                 }
                 else
                     MessageBox.Show("Inserire un valore maggiore di quello attuale");
@@ -74,34 +80,39 @@ namespace Borelli_LetturaDati
         public static string Funzione1e2(int daDoveVieni)
         {
             bool helo = true;
-            int a = -1;
-            int lunghezza;
-            using (StreamReader sr = new StreamReader(@"dati.csv", true))
-            {
-                string line = sr.ReadLine();
-                lunghezza = line.Length;
-                while (!sr.EndOfStream)
-                {
-                    line = sr.ReadLine();
+            string linetot = "";
+            int lunghezza = 0;
+            var f = new FileStream(@"dati.csv", FileMode.Open, FileAccess.ReadWrite);
+            BinaryReader reader = new BinaryReader(f);
+            f.Seek(0, SeekOrigin.Begin);
+            //string line = sr.ReadLine();
+            //lunghezza = line.Length;
+            while (f.Position < f.Length)
+                linetot += Encoding.ASCII.GetString(reader.ReadBytes(1));
 
-                    if (a != -1)//se non è prima volta
-                    {
-                        if (a != line.Length)
-                        {
-                            helo = false;
-                            if (daDoveVieni == 1 && a < line.Length)
-                                lunghezza = line.Length;
-                        }
-                    }
-                    a = line.Length;
+            string[] fields = linetot.Split('#');
+            for (int i = 0; i < fields.Length - 1 - 1; i++)
+            {
+                if (i == 0)
+                    lunghezza = fields[i].Length;
+
+                if (fields[i].Length != fields[i + 1].Length)
+                {
+                    helo = false;
+                    if (daDoveVieni == 1 && fields[i].Length < fields[i + 1].Length)
+                        lunghezza = fields[i + 1].Length;
                 }
-                if (!helo && daDoveVieni == 0)//primi due if se sto controllando che siano lunghi uguali
-                    return "LE LUNGHEZZE SONO DIVERSE";
-                else if (helo && daDoveVieni == 0)
-                    return "LE LUNGHEZZE SONO UGUALI";
-                else//mi interessa solo la lunghezza maggiore
-                    return $"{line.Length}";
             }
+
+            f.Close();
+
+
+            if (!helo && daDoveVieni == 0)//primi due if se sto controllando che siano lunghi uguali
+                return "LE LUNGHEZZE SONO DIVERSE";
+            else if (helo && daDoveVieni == 0)
+                return "LE LUNGHEZZE SONO UGUALI";
+            else//mi interessa solo la lunghezza maggiore
+                return $"{lunghezza}";
         }
     }
 }

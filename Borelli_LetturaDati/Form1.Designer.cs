@@ -50,7 +50,7 @@
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(120, 67);
             this.button2.TabIndex = 1;
-            this.button2.Text = "CONTROLLA LUNGHEZZA";
+            this.button2.Text = "LUNGHEZZA MAGGIORE";
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
