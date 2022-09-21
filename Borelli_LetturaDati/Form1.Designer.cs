@@ -86,9 +86,9 @@
             // 
             this.button5.Location = new System.Drawing.Point(516, 12);
             this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(120, 67);
+            this.button5.Size = new System.Drawing.Size(126, 67);
             this.button5.TabIndex = 5;
-            this.button5.Text = "VISUALIZZA/ELIMINA";
+            this.button5.Text = "VISUALIZZA/ELIMINA/SCAMBIA";
             this.button5.UseVisualStyleBackColor = true;
             this.button5.Click += new System.EventHandler(this.button5_Click);
             // 
