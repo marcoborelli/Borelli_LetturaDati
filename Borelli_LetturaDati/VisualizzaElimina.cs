@@ -15,6 +15,7 @@ namespace Borelli_LetturaDati
     public partial class VisualizzaElimina : Form
     {
         public int numm { get; set; }
+        Aggiunta agg = new Aggiunta();
         public VisualizzaElimina()
         {
             InitializeComponent();
@@ -46,6 +47,14 @@ namespace Borelli_LetturaDati
         {
             if (listView1.SelectedItems.Count == 2)
                 ScambiaFisicamente(listView1.SelectedItems[0].SubItems[1].Text, listView1.SelectedItems[1].SubItems[1].Text, @"dati.csv", numm);
+            VisualizzaElimina_Load(sender, e);
+        }
+        private void button3_Click(object sender, EventArgs e)//aggiungi
+        {
+            agg.numm = numm;
+            this.Visible = false;
+            agg.ShowDialog();
+            this.Visible = true;
             VisualizzaElimina_Load(sender, e);
         }
         public static void ScambiaFisicamente(string nome1, string nome2, string filename, int numm)
